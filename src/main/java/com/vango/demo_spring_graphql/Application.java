@@ -1,4 +1,4 @@
-package com.vango.demo_spring_graphql_subscription;
+package com.vango.demo_spring_graphql;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

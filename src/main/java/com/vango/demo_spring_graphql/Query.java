@@ -1,4 +1,4 @@
-package com.vango.demo_spring_graphql_subscription;
+package com.vango.demo_spring_graphql;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import org.springframework.stereotype.Component;
