@@ -1,0 +1,11 @@
+schema {
+  query: Query
+}
+
+type HelloWorld {
+  myNameIs: String!
+}
+
+type Query {
+  getHelloWorlds(count: Int): [HelloWorld]
+}

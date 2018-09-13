@@ -1,0 +1,7 @@
+.gradle
+.idea
+gradle
+out
+client/node_modules
+.DS_Store
+*.iml
