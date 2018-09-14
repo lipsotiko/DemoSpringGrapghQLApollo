@@ -1,11 +1,22 @@
 schema {
-  query: Query
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
 }
 
 type HelloWorld {
-  myNameIs: String!
+    myNameIs: String!
 }
 
 type Query {
-  getHelloWorlds(count: Int): [HelloWorld]
+    getHelloWorlds(count: Int): [HelloWorld]
+}
+
+type Mutation {
+    setHelloWorlds(name: String, count: Int): [HelloWorld]
+}
+
+type Subscription {
+    sayHelloToTheWorld: HelloWorld!
+    sayHelloToTheWorldByName(name: String!): HelloWorld!
 }

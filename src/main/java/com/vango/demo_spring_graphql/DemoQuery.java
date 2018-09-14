@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-class Query implements GraphQLQueryResolver {
+class DemoQuery implements GraphQLQueryResolver {
 
     public List<HelloWorld> getHelloWorlds(int count) {
         List<HelloWorld> helloWorlds = new ArrayList<>();
