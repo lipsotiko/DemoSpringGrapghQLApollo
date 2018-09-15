@@ -26,9 +26,11 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'com.graphql-java:graphql-spring-boot-starter:5.0.2'
 	compile 'com.graphql-java:graphiql-spring-boot-starter:5.0.2'
 	compile 'com.graphql-java:graphql-java-tools:5.2.4'
-	compile "io.reactivex.rxjava2:rxjava:2.1.5"
+	compile 'io.reactivex.rxjava2:rxjava:2.1.5'
+	compile 'com.h2database:h2'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

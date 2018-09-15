@@ -10,6 +10,7 @@ class App extends Component {
             <li>https://www.apollographql.com/</li>
             <li>https://graphql.org/learn/schema/</li>
             <li>https://github.com/graphql-java/graphql-spring-boot</li>
+            <li>https://siler.leocavalcante.com/graphql/subscriptions.html</li>
         </ul>
         <h3>Query:</h3>
         <h3>Mutation:</h3>

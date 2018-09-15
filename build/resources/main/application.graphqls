@@ -5,18 +5,20 @@ schema {
 }
 
 type HelloWorld {
+    id: Int!
     myNameIs: String!
 }
 
 type Query {
-    getHelloWorlds(count: Int): [HelloWorld]
+    getHelloWorlds: [HelloWorld]
+    getHelloWorldsByName(name: String): [HelloWorld]
 }
 
 type Mutation {
-    setHelloWorlds(name: String, count: Int): [HelloWorld]
+    saveHelloWorld(name: String): HelloWorld
 }
 
 type Subscription {
     sayHelloToTheWorld: HelloWorld!
-    sayHelloToTheWorldByName(name: String!): HelloWorld!
+    saidHelloToTheWorld(name: String!): HelloWorld!
 }

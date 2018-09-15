@@ -15,7 +15,7 @@ public class DemoSubscription implements GraphQLSubscriptionResolver {
         this.helloWorldPublisher = helloWorldPublisher;
     }
 
-    public Publisher<HelloWorld> sayHelloToTheWorldByName(String name) {
+    public Publisher<HelloWorld> saidHelloToTheWorld(String name) {
         return helloWorldPublisher.getPublisher(Collections.singletonList(name));
     }
 

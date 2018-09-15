@@ -1,6 +1,7 @@
 package com.vango.demo_spring_graphql;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,12 +10,15 @@ import java.util.List;
 @Component
 class DemoQuery implements GraphQLQueryResolver {
 
-    public List<HelloWorld> getHelloWorlds(int count) {
-        List<HelloWorld> helloWorlds = new ArrayList<>();
-        for(int i = 1; i <= count; i++) {
-            helloWorlds.add(new HelloWorld());
-        }
-        return helloWorlds;
+    @Autowired
+    private HelloWorldRepository helloWorldRepository;
+
+    public List<HelloWorld> getHelloWorlds() {
+        return helloWorldRepository.findAll();
+    }
+
+    public List<HelloWorld> getHelloWorldsByName(String name) {
+        return helloWorldRepository.findAll();
     }
 
 }
