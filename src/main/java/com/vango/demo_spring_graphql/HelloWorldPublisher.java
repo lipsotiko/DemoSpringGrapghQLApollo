@@ -7,6 +7,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.observables.ConnectableObservable;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -20,8 +21,8 @@ public class HelloWorldPublisher {
 
     public HelloWorldPublisher() {
         Observable<HelloWorld> helloWorldObservable = Observable.create(emitter -> {
-            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-            executorService.scheduleAtFixedRate(newHelloWorld(emitter), 0, 10, TimeUnit.SECONDS);
+            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
+            executorService.scheduleAtFixedRate(newHelloWorlds(emitter), 0, 10, TimeUnit.SECONDS);
         });
 
         ConnectableObservable<HelloWorld> connectableObservable = helloWorldObservable.share().publish();
@@ -30,11 +31,10 @@ public class HelloWorldPublisher {
         publisher = connectableObservable.toFlowable(BackpressureStrategy.BUFFER);
     }
 
-    private Runnable newHelloWorld(ObservableEmitter<HelloWorld> emitter) {
+    private Runnable newHelloWorlds(ObservableEmitter<HelloWorld> emitter) {
         return () -> {
-            List<HelloWorld> helloWorldUpdate = getUpdates(1);
+            List<HelloWorld> helloWorldUpdate = getUpdates();
             if (helloWorldUpdate != null) {
-                System.out.println("Saying Hello to the World");
                 emitHello(emitter, helloWorldUpdate);
             }
         };
@@ -43,9 +43,11 @@ public class HelloWorldPublisher {
     private void emitHello(ObservableEmitter<HelloWorld> emitter, List<HelloWorld> helloWorldUpdates) {
         for (HelloWorld helloWorld : helloWorldUpdates) {
             try {
+                System.out.println(String.format("%s Saying Hello to the World %s"
+                        , helloWorld.getName(), ZonedDateTime.now().toString()));
                 emitter.onNext(helloWorld);
             } catch (RuntimeException e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -56,15 +58,17 @@ public class HelloWorldPublisher {
 
     public Flowable<HelloWorld> getPublisher(List<String> name) {
         if (name != null) {
-            return publisher.filter(helloWorldUpdate -> name.contains(helloWorldUpdate.getMyNameIs()));
+            return publisher.filter(helloWorldUpdate -> name.contains(helloWorldUpdate.getName()));
         }
         return publisher;
     }
 
-    private List<HelloWorld> getUpdates(int number) {
+    private List<HelloWorld> getUpdates() {
         List<HelloWorld> helloWorldUpdates = new ArrayList<>();
-        for (int i = 1; i <= number; i++) {
-            helloWorldUpdates.add(new HelloWorld());
+        for (int i = 1; i <= 5; i++) {
+            HelloWorld helloWorld = new HelloWorld();
+            helloWorld.setName(String.format("Vango %s",i));
+            helloWorldUpdates.add(helloWorld);
         }
         return helloWorldUpdates;
     }

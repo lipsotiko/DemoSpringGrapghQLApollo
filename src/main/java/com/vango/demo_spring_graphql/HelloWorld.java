@@ -1,24 +1,35 @@
 package com.vango.demo_spring_graphql;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@EntityListeners({QueueStoreJpaListener.class})
 public class HelloWorld {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private String myNameIs;
+    private String name;
 
-    public String getMyNameIs() {
-        return myNameIs;
+    public HelloWorld() {
+
     }
 
-    public void setMyNameIs(String name) {
-        this.myNameIs = name;
+    public HelloWorld(HelloWorldInput helloWorldInput) {
+        this.id = helloWorldInput.getId();
+        this.name = helloWorldInput.getName();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
