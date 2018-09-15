@@ -3,7 +3,7 @@ package com.vango.demo_spring_graphql;
 import javax.persistence.*;
 
 @Entity
-@EntityListeners({QueueStoreJpaListener.class})
+@EntityListeners({HelloWorldListener.class})
 public class HelloWorld {
 
     @Id
@@ -12,9 +12,7 @@ public class HelloWorld {
 
     private String name;
 
-    public HelloWorld() {
-
-    }
+    public HelloWorld() { }
 
     public HelloWorld(HelloWorldInput helloWorldInput) {
         this.id = helloWorldInput.getId();
@@ -31,5 +29,10 @@ public class HelloWorld {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("HelloWorld(id: %s, name: %s)",this.id, this.name);
     }
 }

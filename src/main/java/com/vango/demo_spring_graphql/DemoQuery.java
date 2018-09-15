@@ -8,19 +8,19 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
-class DemoQuery implements GraphQLQueryResolver {
+public class DemoQuery implements GraphQLQueryResolver {
 
     @Autowired
     private HelloWorldRepository helloWorldRepository;
 
     public List<HelloWorld> getHelloWorlds() {
-        System.out.println(String.format("SEARCH ALL Saying Hello to the World %s"
+        System.out.println(String.format("SEARCHING ALL %s"
                 , ZonedDateTime.now().toString()));
         return helloWorldRepository.findAll();
     }
 
     public List<HelloWorld> getHelloWorldsByName(String name) {
-        System.out.println(String.format("SEARCH %s Saying Hello to the World %s"
+        System.out.println(String.format("SEARCHING %s %s"
                 , name, ZonedDateTime.now().toString()));
         return helloWorldRepository.findByName(name);
     }
