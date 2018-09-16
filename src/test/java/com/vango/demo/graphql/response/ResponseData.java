@@ -7,4 +7,6 @@ import java.util.List;
 public class ResponseData {
     public List<HelloWorld> getHelloWorlds;
     public List<HelloWorld> getHelloWorldsByName;
+    public HelloWorld saveHelloWorld;
+    public List<HelloWorld> deleteHelloWorlds;
 }

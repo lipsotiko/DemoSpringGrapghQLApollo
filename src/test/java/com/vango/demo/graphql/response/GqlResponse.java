@@ -1,5 +1,5 @@
 package com.vango.demo.graphql.response;
 
-public class QueryResponse {
+public class GqlResponse {
     public ResponseData data;
 }

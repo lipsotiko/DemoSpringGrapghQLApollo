@@ -20,7 +20,7 @@ type Query {
 }
 
 type Mutation {
-    persistHelloWorld(helloWorldInput: HelloWorldInput): HelloWorld!
+    saveHelloWorld(helloWorldInput: HelloWorldInput): HelloWorld!
     deleteHelloWorlds(name: String): [HelloWorld]
 }
 

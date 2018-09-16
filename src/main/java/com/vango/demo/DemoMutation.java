@@ -13,7 +13,7 @@ public class DemoMutation implements GraphQLMutationResolver {
     @Autowired
     private HelloWorldRepository helloWorldRepository;
 
-    public HelloWorld persistHelloWorld(HelloWorldInput helloWorldInput) {
+    public HelloWorld saveHelloWorld(HelloWorldInput helloWorldInput) {
         if (helloWorldInput.getId() == null) {
             System.out.println(String.format("SAVING %s %s"
                     , helloWorldInput, ZonedDateTime.now().toString()));
