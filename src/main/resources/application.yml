@@ -1,12 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:mqi
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
 graphql:
   servlet:
     subscriptions:
       websocket:
         path: /subscriptions
-
-spring:
-  datasource:
-      url: jdbc:h2:mem:mqi
-      username: SA
-      password:
-      driver-class-name: org.h2.Driver

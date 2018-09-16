@@ -1,4 +1,4 @@
-package com.vango.demo_spring_graphql;
+package com.vango.demo;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;

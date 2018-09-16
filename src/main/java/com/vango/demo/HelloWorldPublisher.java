@@ -1,4 +1,4 @@
-package com.vango.demo_spring_graphql;
+package com.vango.demo;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
