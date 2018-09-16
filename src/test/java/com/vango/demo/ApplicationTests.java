@@ -31,17 +31,11 @@ public class ApplicationTests {
 	public void setUp() {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HelloWorld helloWorld1 = new HelloWorld();
-		helloWorld1.setName("vango 1");
-		helloWorldRepository.saveAndFlush(helloWorld1);
-
-		HelloWorld helloWorld2 = new HelloWorld();
-		helloWorld2.setName("vango 2");
-		helloWorldRepository.saveAndFlush(helloWorld2);
-
-		HelloWorld helloWorld3 = new HelloWorld();
-		helloWorld3.setName("vango 3");
-		helloWorldRepository.saveAndFlush(helloWorld3);
+		for(int i = 1; i <= 10; i++) {
+			HelloWorld helloWorld = new HelloWorld();
+			helloWorld.setName(String.format("vango %s", i));
+			helloWorldRepository.saveAndFlush(helloWorld);
+		}
 	}
 
 	@After
@@ -51,24 +45,24 @@ public class ApplicationTests {
 
 	@Test
 	public void getHelloWorldsWithGraphQL() throws IOException {
-		String body = "{ \"query\": \"query { getHelloWorlds { id name } }\", \"variables\": null }";
-		httpEntity = new HttpEntity<>(body, headers);
-		exchange = restTemplate.exchange("/graphql", HttpMethod.POST, httpEntity, String.class);
-
-		QueryResponse queryResponse = mapper.readValue(exchange.getBody(), QueryResponse.class);
-		assertThat(queryResponse.data.getHelloWorlds.size()).isEqualTo(3);
+		String query = "{ \"query\": \"query { getHelloWorlds { id name } }\", \"variables\": null }";
+		QueryResponse queryResponse = executeGraphQL(query);
+		assertThat(queryResponse.data.getHelloWorlds.size()).isEqualTo(10);
 	}
 
 	@Test
 	public void getHelloWorldsByNameWithGraphQL() throws IOException {
-		String body = "{ \"query\": \"query getHelloWorldsByName($name: String!) { " +
+		String query = "{ \"query\": \"query getHelloWorldsByName($name: String!) { " +
 				"getHelloWorldsByName(name: $name) { id name } } \", \"variables\": {\"name\": \"vango 1\"} }";
-		httpEntity = new HttpEntity<>(body, headers);
-		exchange = restTemplate.exchange("/graphql", HttpMethod.POST, httpEntity, String.class);
-
-		QueryResponse queryResponse = mapper.readValue(exchange.getBody(), QueryResponse.class);
+		QueryResponse queryResponse = executeGraphQL(query);
 		assertThat(queryResponse.data.getHelloWorldsByName.size()).isEqualTo(1);
 		assertThat(queryResponse.data.getHelloWorldsByName.get(0).getName()).isEqualTo("vango 1");
+	}
+
+	private QueryResponse executeGraphQL(String query) throws IOException {
+		httpEntity = new HttpEntity<>(query, headers);
+		exchange = restTemplate.exchange("/graphql", HttpMethod.POST, httpEntity, String.class);
+		return mapper.readValue(exchange.getBody(), QueryResponse.class);
 	}
 
 }
