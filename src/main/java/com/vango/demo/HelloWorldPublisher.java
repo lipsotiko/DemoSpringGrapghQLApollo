@@ -7,8 +7,8 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.observables.ConnectableObservable;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,10 +19,12 @@ public class HelloWorldPublisher {
 
     private final Flowable<HelloWorld> publisher;
 
+    private HelloWorldQueue helloWorldQueue = HelloWorldQueue.getStreamInstance();
+
     public HelloWorldPublisher() {
         Observable<HelloWorld> helloWorldObservable = Observable.create(emitter -> {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
-            executorService.scheduleAtFixedRate(newHelloWorlds(emitter), 0, 10, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(newHelloWorlds(emitter), 0, 1, TimeUnit.SECONDS);
         });
 
         ConnectableObservable<HelloWorld> connectableObservable = helloWorldObservable.share().publish();
@@ -33,18 +35,14 @@ public class HelloWorldPublisher {
 
     private Runnable newHelloWorlds(ObservableEmitter<HelloWorld> emitter) {
         return () -> {
-            List<HelloWorld> helloWorldUpdate = getUpdates();
-            if (helloWorldUpdate != null) {
-                emitHello(emitter, helloWorldUpdate);
-            }
+            List<HelloWorld> helloWorldUpdates = getUpdates();
+            emitHello(emitter, helloWorldUpdates);
         };
     }
 
     private void emitHello(ObservableEmitter<HelloWorld> emitter, List<HelloWorld> helloWorldUpdates) {
         for (HelloWorld helloWorld : helloWorldUpdates) {
             try {
-                System.out.println(String.format("%s Saying Hello to the World %s"
-                        , helloWorld.getName(), ZonedDateTime.now().toString()));
                 emitter.onNext(helloWorld);
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
@@ -65,11 +63,15 @@ public class HelloWorldPublisher {
 
     private List<HelloWorld> getUpdates() {
         List<HelloWorld> helloWorldUpdates = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            HelloWorld helloWorld = new HelloWorld();
-            helloWorld.setName(String.format("Vango %s",i));
-            helloWorldUpdates.add(helloWorld);
+
+        while (!helloWorldQueue.isEmpty()) {
+            helloWorldUpdates.add(helloWorldQueue.poll());
         }
+
+        if (helloWorldUpdates.size() == 0) {
+            return Collections.emptyList();
+        }
+
         return helloWorldUpdates;
     }
 

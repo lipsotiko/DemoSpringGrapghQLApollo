@@ -13,12 +13,14 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTests {
+public class GraphQLTests {
 
 	@Autowired private TestRestTemplate restTemplate;
 	@Autowired private HelloWorldRepository helloWorldRepository;
@@ -30,26 +32,25 @@ public class ApplicationTests {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		for(int i = 1; i <= 10; i++) {
-			HelloWorld helloWorld = new HelloWorld();
-			helloWorld.setName(String.format("vango %s", i));
+			HelloWorld helloWorld = new HelloWorld(String.format("vango %s", i));
 			helloWorldRepository.saveAndFlush(helloWorld);
 		}
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown()	 {
 		helloWorldRepository.deleteAll();
 	}
 
 	@Test
-	public void getHelloWorlds_GQL() throws IOException {
+	public void getHelloWorlds_GQL_Test() throws IOException {
 		String query = "{ \"query\": \"query { getHelloWorlds { id name } }\", \"variables\": null }";
 		GqlResponse gqlResponse = executeGQL(query);
 		assertThat(gqlResponse.data.getHelloWorlds.size()).isEqualTo(10);
 	}
 
 	@Test
-	public void getHelloWorldsByName_GQL() throws IOException {
+	public void getHelloWorldsByName_GQL_Test() throws IOException {
 		String query = "{ \"query\": \"query getHelloWorldsByName($name: String!) { " +
 				"getHelloWorldsByName(name: $name) { id name } } \", \"variables\": {\"name\": \"vango 1\"} }";
 		GqlResponse gqlResponse = executeGQL(query);
@@ -58,7 +59,7 @@ public class ApplicationTests {
 	}
 
 	@Test
-	public void saveHelloWorld_GQL() throws IOException {
+	public void saveHelloWorld_GQL_Test() throws IOException {
 		String query = "{ \"query\": \"mutation saveHelloWorld($name: String!) { " +
 				"saveHelloWorld(helloWorldInput: {name: $name}) { id name } } \", " +
 				"\"variables\": {\"name\": \"new vango\"} }";
@@ -70,20 +71,26 @@ public class ApplicationTests {
 	}
 
 	@Test
-	public void updateHelloWorld_GQL() throws IOException {
+	public void updateHelloWorld_GQL_Test() throws IOException {
 		HelloWorld existingHelloWorld = helloWorldRepository.findAll().get(0);
 		Long id = existingHelloWorld.getId();
-
 		String query = "{ \"query\": \"mutation saveHelloWorld($name: String!) { " +
 				"saveHelloWorld(helloWorldInput: {id: " + id + " name: $name}) { id name } } \", " +
 				"\"variables\": {\"name\": \"updated vango\"} }";
 
 		executeGQL(query);
-		assertThat(helloWorldRepository.findById(id).get().getName()).isEqualTo("updated vango");
+
+		Optional<HelloWorld> updatedRecord = helloWorldRepository.findById(id);
+
+		if (updatedRecord.isPresent()) {
+			assertThat(updatedRecord.get().getName()).isEqualTo("updated vango");
+		} else {
+			fail("The updated Hello World record could not be found in the database!!!");
+		}
 	}
 
 	@Test
-	public void deleteHelloWorld_GQL() throws IOException {
+	public void deleteHelloWorld_GQL_Test() throws IOException {
 		String query = "{ \"query\": \"mutation deleteHelloWorlds($name: String!) { " +
 				"deleteHelloWorlds(name: $name) { id name } } \", " +
 				"\"variables\": {\"name\": \"vango 1\"} }";

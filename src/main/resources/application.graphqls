@@ -25,6 +25,6 @@ type Mutation {
 }
 
 type Subscription {
-    sayHelloToTheWorld: HelloWorld!
-    saidHelloToTheWorld(name: String!): HelloWorld!
+    helloWorldUpdated: HelloWorld!
+    helloWorldUpdatedFilter(name: String!): HelloWorld!
 }
