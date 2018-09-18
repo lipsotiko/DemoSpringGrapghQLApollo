@@ -1,5 +1,5 @@
 Demo Spring Boot / React Js Application:
-Realtime CRUD with GraphQL Querys, Mutations, and Subscriptions utilizing ReactiveX & Apollo
+Real-time CRUD with GraphQL Queries, Mutations, and Subscriptions utilizing ReactiveX & Apollo
 
 Resources:
 https://graphql.org/learn/schema/
