@@ -24,7 +24,7 @@ public class HelloWorldPublisher {
     public HelloWorldPublisher() {
         Observable<HelloWorld> helloWorldObservable = Observable.create(emitter -> {
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
-            executorService.scheduleAtFixedRate(newHelloWorlds(emitter), 0, 1, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(newHelloWorlds(emitter), 0, 100, TimeUnit.MILLISECONDS);
         });
 
         ConnectableObservable<HelloWorld> connectableObservable = helloWorldObservable.share().publish();
@@ -45,9 +45,11 @@ public class HelloWorldPublisher {
             try {
                 emitter.onNext(helloWorld);
             } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+                emitter.onError(new HelloWorldException(e.getMessage()));
             }
         }
+
+        emitter.onComplete();
     }
 
     public Flowable<HelloWorld> getPublisher() {
