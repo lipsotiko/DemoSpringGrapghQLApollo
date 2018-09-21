@@ -15,11 +15,11 @@ public class DemoSubscription implements GraphQLSubscriptionResolver {
         this.helloWorldPublisher = helloWorldPublisher;
     }
 
-    public Publisher<HelloWorld> helloWorldUpdatedFilter(String name) {
+    public Publisher<HelloWorld> helloWorldUpdatesFilter(String name) {
         return helloWorldPublisher.getPublisher(Collections.singletonList(name));
     }
 
-    public Publisher<HelloWorld> helloWorldUpdated() {
+    public Publisher<HelloWorld> helloWorldUpdates() {
         return helloWorldPublisher.getPublisher();
     }
 

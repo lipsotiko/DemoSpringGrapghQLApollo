@@ -6,20 +6,20 @@ export class DemoQueryComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { name: "", search: false, gql: "" };
+        this.state = { name: "", search: false, gql: GET_ALL_HELLO_WORLDS };
         this.handleChange = this.handleChange.bind(this);
-        this.setRenderQuery = this.setRenderQuery.bind(this);
+        this.setQuery = this.setQuery.bind(this);
     }
 
     handleChange(event) {
         this.setState({ name: event.target.value, renderQuery: false });
     }
 
-    setRenderQuery() {
+    setQuery() {
         if (this.state.name.length > 0) {
-            this.setState({ renderQuery: true, gql: GET_HELLO_WORLDS_BY_NAME});
+            this.setState({ renderQuery: true, gql: GET_HELLO_WORLDS_BY_NAME });
         } else {
-            this.setState({ renderQuery: true, gql: GET_ALL_HELLO_WORLDS});
+            this.setState({ renderQuery: true, gql: GET_ALL_HELLO_WORLDS });
         }
     }
 
@@ -28,7 +28,7 @@ export class DemoQueryComponent extends React.Component {
             <h3>Query:</h3>
             <p>Read `HelloWorld`s` by inputting a name, or a blank name to return all of them:</p>
             <input type="text" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} />
-            <button onClick={this.setRenderQuery} >Read</button>
+            <button onClick={this.setQuery} >Read</button>
         </div>
 
         const queryContents = <Query
@@ -38,7 +38,7 @@ export class DemoQueryComponent extends React.Component {
             {({ loading, error, data }) => {
                 if (loading) return <p>Loading...</p>;
                 if (error) return <p>Error :(</p>;
-                if(this.state.name.length > 0) {
+                if (this.state.name.length > 0) {
                     return data.getHelloWorldsByName.map(({ id, name }) => (
                         <li key={id}>{`ID: ${id} Name: ${name}`}</li>
                     ));
@@ -52,9 +52,9 @@ export class DemoQueryComponent extends React.Component {
 
         if (this.state.renderQuery === true) {
             return (<div>{queryForm} {queryContents}</div>);
-        } else {
-            return (<div>{queryForm}</div>);
         }
+
+        return (<div>{queryForm}</div>);
     }
 }
 
