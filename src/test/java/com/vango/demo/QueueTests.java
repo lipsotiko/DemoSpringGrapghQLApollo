@@ -16,7 +16,7 @@ public class QueueTests {
     private HelloWorldQueue helloWorldQueue = HelloWorldQueue.getStreamInstance();
 
     @Test
-    public void listenerAddsHelloWorldsToQueue() {
+    public void listener_adds_dml_operations_of_helloworlds_to_queue() {
         HelloWorld helloWorld = new HelloWorld("vango");
         HelloWorld created = helloWorldRepository.save(helloWorld);
         created.setName("ΛΕΙΨΟΤΙΣ");

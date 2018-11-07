@@ -43,14 +43,14 @@ public class GraphQLTests {
 	}
 
 	@Test
-	public void getHelloWorlds_GQL_Test() throws IOException {
+	public void get_helloworlds() throws IOException {
 		String query = "{ \"query\": \"query { getHelloWorlds { id name } }\", \"variables\": null }";
 		GqlResponse gqlResponse = executeGQL(query);
 		assertThat(gqlResponse.data.getHelloWorlds.size()).isEqualTo(10);
 	}
 
 	@Test
-	public void getHelloWorldsByName_GQL_Test() throws IOException {
+	public void get_helloworlds_by_name() throws IOException {
 		String query = "{ \"query\": \"query getHelloWorldsByName($name: String!) { " +
 				"getHelloWorldsByName(name: $name) { id name } } \", \"variables\": {\"name\": \"vango 1\"} }";
 		GqlResponse gqlResponse = executeGQL(query);
@@ -59,7 +59,7 @@ public class GraphQLTests {
 	}
 
 	@Test
-	public void saveHelloWorld_GQL_Test() throws IOException {
+	public void save_helloworld() throws IOException {
 		String query = "{ \"query\": \"mutation saveHelloWorld($name: String!) { " +
 				"saveHelloWorld(helloWorldInput: {name: $name}) { id name } } \", " +
 				"\"variables\": {\"name\": \"new vango\"} }";
@@ -71,7 +71,7 @@ public class GraphQLTests {
 	}
 
 	@Test
-	public void updateHelloWorld_GQL_Test() throws IOException {
+	public void update_helloworld() throws IOException {
 		HelloWorld existingHelloWorld = helloWorldRepository.findAll().get(0);
 		Long id = existingHelloWorld.getId();
 		String query = "{ \"query\": \"mutation saveHelloWorld($name: String!) { " +
@@ -90,7 +90,7 @@ public class GraphQLTests {
 	}
 
 	@Test
-	public void deleteHelloWorld_GQL_Test() throws IOException {
+	public void delete_helloworld() throws IOException {
 		String query = "{ \"query\": \"mutation deleteHelloWorlds($name: String!) { " +
 				"deleteHelloWorlds(name: $name) { id name } } \", " +
 				"\"variables\": {\"name\": \"vango 1\"} }";
